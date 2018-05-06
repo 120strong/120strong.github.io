@@ -167,11 +167,8 @@
 					var repdiv = getdiv($house, repName, repPhoto);
 					var sendiv = getdiv($senate, senName, senPhoto);
 					var senateResult = $.grep(self.senateData, function (x) { return x.id == senateId; });
+					var houseResult = $.grep(self.houseData, function(x) { return x.id == houseId});
 					debugger;
-					$sidebar.empty();
-					$sidebar.append(repdiv);
-					$sidebar.append(sendiv);
-
 					if ($("#sidebar.collapsed").length) {
 						toggleSidebar();
 					}
