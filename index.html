@@ -27,6 +27,7 @@
 			/* for the animation */
 			transition: margin 0.3s ease;
 			border-right: 1px solid black;
+			padding: 0;
 		}
 
 		.collapsed {
@@ -74,6 +75,11 @@
 			width: 100px;
 			overflow: hidden;
 		}
+
+		.ui-widget.ui-widget-content,
+		.ui-widget-content{
+			border: none;
+		}
 	</style>
 </head>
 
@@ -87,7 +93,7 @@
 							<a href="#senate">KY Senate</a>
 						</li>
 						<li>
-							<a href="#tabs-2">KY House</a>
+							<a href="#house">KY House</a>
 						</li>
 					</ul>
 					<div id="senate">
@@ -127,7 +133,7 @@
 				var bounds;
 				var geocoder;
 				var $sidebar = $("#sidebar");
-				
+
 				$( "#tabs" ).tabs();
 
 				self.houseData = {};
