@@ -154,13 +154,14 @@
 					}
 				}
 
-				function getdiv(div, name, photo) {
+				function getdiv($div, name, photo) {
+					$div.empty();
 					var namespan = $('<span>', { class: 'name' });
 					namespan.html(name);
 					var imagecontainer = $('<div>', { class: 'image-container' });
 					imagecontainer.append($('<img>', { class: 'photo', src: photo, alt: 'Photo of ' + name }));
-					div.append(imagecontainer);
-					div.append(namespan);
+					$div.append(imagecontainer);
+					$div.append(namespan);
 				}
 
 				function updateData(houseId, repName, repPhoto, senateId, senName, senPhoto) {
