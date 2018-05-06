@@ -133,6 +133,8 @@
 				var bounds;
 				var geocoder;
 				var $sidebar = $("#sidebar");
+				var $senate = $("#senate");
+				var $house = $("#house");
 
 				$( "#tabs" ).tabs();
 
@@ -152,21 +154,18 @@
 					}
 				}
 
-				function getdiv(name, photo, type) {
-					var div = $('<div>', { id: type, class: type });
+				function getdiv(div, name, photo) {
 					var namespan = $('<span>', { class: 'name' });
 					namespan.html(name);
 					var imagecontainer = $('<div>', { class: 'image-container' });
 					imagecontainer.append($('<img>', { class: 'photo', src: photo, alt: 'Photo of ' + name }));
 					div.append(imagecontainer);
 					div.append(namespan);
-
-					return div;
 				}
 
 				function updateData(houseId, repName, repPhoto, senateId, senName, senPhoto) {
-					var repdiv = getdiv(repName, repPhoto);
-					var sendiv = getdiv(senName, senPhoto);
+					var repdiv = getdiv($house, repName, repPhoto);
+					var sendiv = getdiv($senate, senName, senPhoto);
 					var senateResult = $.grep(self.senateData, function (x) { return x.id == senateId; });
 					debugger;
 					$sidebar.empty();
