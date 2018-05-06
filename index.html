@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>KML Layers</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+    <style>
+        #map {
+            height: 100%;
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+		
+		#sidebar {
+		  /* for the animation */
+		  transition: margin 0.3s ease;
+		  border-right: 1px solid black;
+		}
+
+		.collapsed {
+		  /* hide it for small displays*/
+		  display: none;
+		}
+
+		@media (min-width: 992px) {
+		  .collapsed {
+			display: block;
+			/* same width as sidebar */
+			margin-left: -25%;
+		  }
+		}
+		
+		#toggle-container{
+			position: relative;
+			left: -1px;
+			width: 0;
+			height: 0;
+			z-index: 100;
+		}
+		
+		#toggle
+		{
+			position: absolute;
+			top: 0;
+			left: 0;
+			cursor: pointer;
+			background-color: white;
+			border-right: 1px solid black;
+			border-bottom: 1px solid black;
+			padding: 10px;
+		}
+		
+		#content {
+			padding: 0;
+		}
+		
+		img.photo {
+			width: 100px;
+		}
+		
+		div.image-container{
+			height: 140px;
+			width: 100px;
+			overflow: hidden;
+		}
+    </style>
+</head>
+<body>
+	<div class="container-fluid h-100">
+		<div class="row h-100">
+			<div class="col-md-3 col-md-push-9 collapsed" id="sidebar"></div>
+			<div class="col-md-12 h-100" id="content">
+				<div id="toggle-container">
+					<span id="toggle" class="toggle-sidebar"><i class="fas fa-angle-double-right"></i></button>
+				</div>
+				<div id="map">
+			</div>
+		</div>
+	</div>
+	<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+	<script>
+		var mapApp = (function(){
+			self = this;
+		
+			var map;
+			var bounds;
+			var geocoder;
+			var $sidebar = $("#sidebar");
+			
+			self.houseData = {};
+			self.senateData = {};
+			
+			function fitBounds(){
+				map.fitBounds(bounds,0);
+			}
+			
+			function toggleSidebar(){
+				$sidebar.toggleClass("collapsed");
+				$("#content").toggleClass("col-md-12 col-md-9");
+				$("#toggle i").toggleClass("fa-angle-double-right fa-angle-double-left");
+				if ( $("#sidebar.collapsed").length ){
+					fitBounds();
+				}
+			}
+			
+			function getdiv(name, photo, type)
+			{
+				var div = $('<div>', {id:type, class:type});
+				var namespan = $('<span>', {class:'name'});
+				namespan.html(name);
+				var imagecontainer = $('<div>', {class:'image-container'});
+				imagecontainer.append($('<img>', {class:'photo', src:photo, alt:'Photo of ' + name}));
+				div.append(imagecontainer);
+				div.append(namespan);
+				
+				return div;
+			}
+			
+			function updateData(houseId, repName, repPhoto, senateId, senName, senPhoto)
+			{
+				var repdiv = getdiv(repName, repPhoto);
+				var sendiv = getdiv(senName, senPhoto);
+				var senateResult = $.grep(self.senateData, function(x){ return x.id == senateId; });
+				debugger;
+				$sidebar.empty();
+				$sidebar.append(repdiv);
+				$sidebar.append(sendiv);
+				
+				if ( $("#sidebar.collapsed").length ){
+					toggleSidebar();
+				}
+			}
+			
+			$("#toggle").click(function(){
+				toggleSidebar();
+			});
+			
+			self.initMap = function() {
+				map = new google.maps.Map(document.getElementById('map'), {
+					center: new google.maps.LatLng(37.76792991127481, -85.76869238281249),
+					zoom: 8,
+					mapTypeId: google.maps.MapTypeId.ROADMAP,
+					zoomControl: true,
+					mapTypeControl: false,
+					scaleControl: true,
+					streetViewControl: false,
+					rotateControl: true,
+					fullscreenControl: false
+				});
+				geocoder = new google.maps.Geocoder();
+				bounds = new google.maps.LatLngBounds();
+				bounds.extend(new google.maps.LatLng(36.498987, -89.575435));
+				bounds.extend(new google.maps.LatLng(39.233692, -82.040874));
+				var layer = new google.maps.FusionTablesLayer({
+					map: map,
+					heatmap: { enabled: false },
+					suppressInfoWindows: false,
+					query: {
+						select: "geometry",
+						from: "138Y1ve5dqA1xpxXO_pZvSa-j9Bu5B_Is012b_8Ii"
+					},
+					options: {
+						styleId: 2,
+						templateId: 2
+					}
+				});
+				google.maps.event.addListener(layer, 'click', function(e) {
+				  var houseId = e.row['House District'].value;
+				  var repName = e.row['Representative'].value;
+				  var repPhoto = e.row['Representative Photo'].value;
+				  
+				  var senateId = e.row['Senate District'].value;
+				  var senName = e.row['Senator'].value;
+				  var senPhoto = e.row['Senator Photo'].value;
+				  
+				  updateData(houseId, repName, repPhoto, senateId, senName, senPhoto);
+				});
+				fitBounds();
+			}
+			$( window ).resize(function() {
+				fitBounds();
+			});
+							
+			$.ajax({
+			  type: "get",
+			  dataType: "json",
+			  url: "Senate.json",
+			  success: function(data){
+				self.senateData = data;
+			  }
+			});
+		
+			$.ajax({
+			  type: "get",
+			  dataType: "json",
+			  url: "House.json",
+			  success: function(data){
+				self.houseData = data;
+			  },
+			  error: function(jxhr, status, error){
+				debugger;
+			  }
+			});
+			
+			return self;
+		})();
+	</script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyR_6F8uTjb-lC0yApaMx22754dpiFYkQ&callback=mapApp.initMap"></script>
+</body>
+</html>
