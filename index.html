@@ -26,7 +26,7 @@
 		#sidebar {
 			/* for the animation */
 			transition: margin 0.3s ease;
-			border-right: 1px solid black;
+			border-bottom: 1px solid black;
 			padding: 0;
 		}
 
@@ -34,18 +34,11 @@
 			/* hide it for small displays*/
 			display: none;
 		}
-
-		@media (min-width: 992px) {
-			.collapsed {
-				display: block;
-				/* same width as sidebar */
-				margin-left: -25%;
-			}
-		}
-
+		
 		#toggle-container {
 			position: relative;
-			left: -1px;
+			top: -1px;
+			left: 0;
 			width: 0;
 			height: 0;
 			z-index: 100;
@@ -57,6 +50,8 @@
 			left: 0;
 			cursor: pointer;
 			background-color: white;
+			color: #222222;
+			font-weight: bold;
 			border-right: 1px solid black;
 			border-bottom: 1px solid black;
 			padding: 10px;
@@ -74,42 +69,138 @@
 			height: 140px;
 			width: 100px;
 			overflow: hidden;
+			margin: 10px;
+			float: left;
 		}
 
-		.ui-widget.ui-widget-content,
-		.ui-widget-content{
+		.ui-widget-header {
+			background-image: none;
+			background-color: #eeeeee;
+		}
+
+		.ui-corner-all,
+		.ui-corner-bottom,
+		.ui-corner-left,
+		.ui-corner-bl {
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+		}
+
+		#tabs {
+			padding: 0;
 			border: none;
 		}
+
+		.ui-widget-header {
+			border-top: none;
+			border-left: none;
+			border-right: none;
+			padding-top: 2px;
+		}
+
+		.ui-tabs .ui-tabs-nav {
+			padding-top: 2px;
+		}
+
+		div.name {
+			font-weight: bold;
+			margin-left: 131px;
+		}
+
+		div.forteachers {
+			margin-left: 131px;
+		}
+
+		div.outcome {
+			clear: both;
+		}
+
+		i.yellow {
+			color: yellow;
+		}
+
+		i.red {
+			color: red;
+		}
+
+		i.green {
+			color: green;
+		}
+		
+		.fa-angle-double-out:before{
+			content:"\f102"
+		}
+		
+		.fa-angle-double-in:before{
+			content:"\f103"
+		}
+		
+		@media (min-width: 992px) { 
+			#toggle {
+				background-color: #eeeeee;
+			}
+
+			#sidebar {
+				/* for the animation */
+				transition: margin 0.3s ease;
+				border-right: 1px solid black;
+			}
+
+			.collapsed {
+				display: block;
+				/* same width as sidebar */
+				margin-left: -25%;
+			}
+
+			#toggle-container {
+				left: -1px;
+				top: 0;
+			}
+
+			.fa-angle-double-out:before {
+				content:"\f100"
+			}
+			
+			.fa-angle-double-in:before {
+				content:"\f101"
+			}
+		 }
 	</style>
 </head>
 
 <body>
 	<div class="container-fluid h-100">
 		<div class="row h-100">
-			<div class="col-md-3 col-md-push-9 collapsed" id="sidebar">
+			<div class="col-lg-3 col-lg-push-9 collapsed" id="sidebar">
 				<div id="tabs">
 					<ul>
 						<li>
-							<a href="#senate">KY Senate</a>
+							<a href="#senateTab">KY Senate</a>
 						</li>
 						<li>
-							<a href="#house">KY House</a>
+							<a href="#houseTab">KY House</a>
 						</li>
 					</ul>
-					<div id="senate">
-						<h2>Kentucky State Senate</h2>
-						<p>Click where you live on the map to see your senate information.</p>
+					<div id="senateTab">
+						<h2>Your Senator</h2>
+						<div id="senate">
+							<p>Click where you live on the map to see your senate information.</p>
+						</div>
 					</div>
-					<div id="house">
-						<h2>Kentucky House of Representatives</h2>
-						<p>Click where you live on the map to see your house of representative information.</p>
+					<div id="houseTab">
+						<h2>Your Representative</h2>
+						<div id="house">
+							<p>Click where you live on the map to see your house of representative information.</p>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-12 h-100" id="content">
+			<div class="col-lg-12 h-100" id="content">
 				<div id="toggle-container">
 					<span id="toggle" class="toggle-sidebar">
-						<i class="fas fa-angle-double-right"></i>
+						<i class="fas fa-angle-double-in"></i>
 					</span>
 				</div>
 				<div id="map">
@@ -136,7 +227,7 @@
 				var $senate = $("#senate");
 				var $house = $("#house");
 
-				$( "#tabs" ).tabs();
+				$("#tabs").tabs();
 
 				self.houseData = {};
 				self.senateData = {};
@@ -147,29 +238,54 @@
 
 				function toggleSidebar() {
 					$sidebar.toggleClass("collapsed");
-					$("#content").toggleClass("col-md-12 col-md-9");
-					$("#toggle i").toggleClass("fa-angle-double-right fa-angle-double-left");
+					$("#content").toggleClass("col-lg-12 col-lg-9");
+					$("#toggle i").toggleClass("fa-angle-double-in fa-angle-double-out");
 					if ($("#sidebar.collapsed").length) {
 						fitBounds();
 					}
 				}
 
-				function getdiv($div, name, photo) {
+				function getdiv($div, name, photo, forTeachers, party, opponent, simplename) {
 					$div.empty();
-					var namespan = $('<span>', { class: 'name' });
-					namespan.html(name);
-					var imagecontainer = $('<div>', { class: 'image-container' });
-					imagecontainer.append($('<img>', { class: 'photo', src: photo, alt: 'Photo of ' + name }));
-					$div.append(imagecontainer);
-					$div.append(namespan);
+
+					var forText;
+					var desText;
+					if (forTeachers === "Nay") {
+						forText = "<i class='fa fa-check green'></i>&nbsp;Voted <span class='foreachers'>in support of</span> teachers on <span class='sb151'>SB151</span>.";
+						desText = "If you are a " + party + " and want to say thank you, vote with your teachers on May 22nd. Vote for " + simplename + ". Let's keep supporters of our teachers in office.";
+					}
+					else if (forTeachers === "Yea") {
+						forText = "<i class='fa fa-ban red'></i>&nbsp;Voted <span class='foreachers'>against</span> teachers on <span class='sb151'>SB151</span>.";
+						if (opponent) {
+							desText = "If you are a " + party + " and want to send a signal that teachers are not political pawns, vote with teachers vote for " + opponent + " on May 22nd. Let's vote " + simplename + " out of the primary race.";
+						} else {
+							desText = "Unfortunately " + simplename + " doesn't have any opponents in the May 22nd primary. To support teachers, please vote \"I support education\" or just \"Teachers\" in the \"Write-In\" section of the ballot.";
+						}
+					} else {
+						forText = "<i class='fa fa-question yellow'></i>&nbsp;Didn't vote on <span class='sb151'>SB151</span>.";
+						if (opponent) {
+							desText = "If you are a " + party + " and want to send a signal that our elected officials should defend teachers, vote with teachers. Vote for " + opponent + " on May 22nd. Let's vote " + name + " out of the primary race.";
+						} else {
+							desText = "Unfortunately " + simplename + " doesn't have any opponents in the May 22nd primary. To support teachers, please vote \"I support education\" or just \"Teachers\" in the \"Write-In\" section of the ballot.";
+						}
+					}
+
+					$div.html(`<div class='image-container'><img class='photo' src='` + photo + `' alt='Photo of ` + simplename + `' /></div>
+						<div class='name'>(` + party.charAt(0) + ") " + name + `</div>
+						<div class='forteachers'>` + forText + `</div>
+						<div class='outcome'>` + desText + `</div>
+					`);
+
+					return $div;
 				}
 
 				function updateData(houseId, repName, repPhoto, senateId, senName, senPhoto) {
-					var repdiv = getdiv($house, repName, repPhoto);
-					var sendiv = getdiv($senate, senName, senPhoto);
-					var senateResult = $.grep(self.senateData, function (x) { return x.id == senateId; });
-					var houseResult = $.grep(self.houseData, function(x) { return x.id == houseId});
-					debugger;
+					var houseResult = $.grep(self.houseData, function (x) { return x.id == houseId })[0];
+					var houseDiv = getdiv($house, houseResult.incumbent, repPhoto, houseResult.vote, houseResult.party, houseResult.opponent, repName);
+
+					var senateResult = $.grep(self.senateData, function (x) { return x.id == senateId; })[0];
+					var senDiv = getdiv($senate, senateResult.incumbent, senPhoto, senateResult.vote, senateResult.party, senateResult.opponent, senName);
+
 					if ($("#sidebar.collapsed").length) {
 						toggleSidebar();
 					}
