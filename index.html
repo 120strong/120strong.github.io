@@ -195,6 +195,9 @@
 			padding-left: 3px;
 			padding-right: 3px;
 		 }
+		 .topheader{
+			text-align: left;
+		 }
 	</style>
 </head>
 
@@ -286,7 +289,7 @@
 					}
 				}
 
-				function getdiv($div, $ballot, running, name, photo, againstTeachers, party, opponent, simplename, location) {
+				function getdiv($div, $ballot, running, name, photo, againstTeachers, party, opponent, simplename, location, others) {
 					$div.empty();
 
 					var forText;
@@ -294,7 +297,7 @@
 					var support = false;
 					
 					if (againstTeachers === "Nay") {
-						forText = "<i class='fa fa-check green'></i>&nbsp;Voted <span class='foreachers'>in support of</span> teachers on <span title='Click for more information' class='sb151'>SB151</span>.";
+						forText = "<i class='fa fa-check green'></i>&nbsp;Voted <span class='forTeachers'>in support of</span> teachers on <span title='Click for more information' class='sb151'>SB151</span>.";
 						if(running)
 						{
 							desText = "If you are a " + party + ", vote for " + simplename + ". Let's keep supporters of our teachers in office.";
@@ -304,7 +307,7 @@
 						}
 					}
 					else if (againstTeachers === "Yea") {
-						forText = "<i class='fa fa-ban red'></i>&nbsp;Voted <span class='foreachers'>against</span> teachers on <span title='Click for more information' class='sb151'>SB151</span>.";
+						forText = "<i class='fa fa-ban red'></i>&nbsp;Voted <span class='againstTeachers'>against</span> teachers on <span title='Click for more information' class='sb151'>SB151</span>.";
 						if(!running){
 							desText = "Because " + simplename + " is not running for re-election consider your choices and keep public education supporters in office.";
 						}else if (opponent) {
@@ -330,18 +333,35 @@
 					`);
 					
 					var partyName;
+					var topHeader;
 					if(party === 'Democrat')
+					{
 						partyName = 'Democratic<br/>Party';
+						topHeader = 'Democratic Party';
+					}
 					else
+					{
 						partyName = 'Republican<br/>Party';
+						topHeader = 'Republican Party';
+					}
 						
 					var inc = getBallotDiv(support, name);
 					
 					var opp = '';
 					if(opponent)
+					{
 						opp = getBallotDiv(!support, opponent);
+						if(others){
+							others.split(/\r?\n/).forEach(function(other)
+							{
+								opp += getBallotDiv(false, other);
+							});
+						}
+					}else if(!support){
+						opp = getBallotDiv(true, 'None of the above');
+					}
 					
-					$ballot.html(`<br/><div class='ballot'><div class='header'><img src='` + party + `.png' alt='` + party + ` logo' /><br/>` + partyName + `
+					$ballot.html(`<br/>Your May 22 2018 Ballot<div class='ballot'><div class='topheader'>`+topHeader+`<br />Primary Ballot</div><div class='header'><img src='` + party + `.png' alt='` + party + ` logo' /><br/>` + partyName + `
 						</div>
 						<div class='location'>` + location + `</div>` +
 						inc + opp
@@ -352,6 +372,15 @@
 				}
 				
 				function getBallotDiv(support, name){
+					if(name.includes(','))
+					{
+						var names = name.split(',');
+						name = '';
+						for(var i = 1; i < names.length; i++){
+							name += names[i] + ' ';
+						}
+						name += names[0];
+					}
 					var supportSpan = `<i class='fa fa-ban white' title='Leave this blank'></i>`;
 					if(support)
 						supportSpan = `<i class='fa fa-check green' title='Vote with teachers!'></i>`;
@@ -362,13 +391,13 @@
 
 				function updateData(houseId, repName, repPhoto, senateId, senName, senPhoto) {
 					var houseResult = $.grep(self.houseData, function (x) { return x.id == houseId })[0];
-					var houseDiv = getdiv($house, $houseBallot, houseResult.running === 'Y', houseResult.incumbent, repPhoto, houseResult.vote, houseResult.party, houseResult.opponent, repName, 'House District ' + houseId);
+					var houseDiv = getdiv($house, $houseBallot, houseResult.running === 'Y', houseResult.incumbent, repPhoto, houseResult.vote, houseResult.party, houseResult.opponent, repName, 'House District ' + houseId, houseResult.opponentOther);
 
 					var senateResult = $.grep(self.senateData, function (x) { return x.id == senateId; })[0];
 					if(senateResult.reelection == 'Y')
 					{
 						$senateBallot.show();
-						var senDiv = getdiv($senate, $senateBallot, senateResult.running === 'Y', senateResult.incumbent, senPhoto, senateResult.vote, senateResult.party, senateResult.opponent, senName, 'Senate District ' + senateId);
+						var senDiv = getdiv($senate, $senateBallot, senateResult.running === 'Y', senateResult.incumbent, senPhoto, senateResult.vote, senateResult.party, senateResult.opponent, senName, 'Senate District ' + senateId, senateResult.opponentOther);
 					}
 					else
 					{
