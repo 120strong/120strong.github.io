@@ -261,7 +261,8 @@
 				var $house = $("#house");
 				var $houseBallot = $("#houseBallot");
 
-				$("#tabs").tabs();
+				var $tbs = $("#tabs");
+				$tbs.tabs();
 
 				self.houseData = {};
 				self.senateData = {};
@@ -271,7 +272,7 @@
 					event.stopPropagation();
 					window.open('http://www.kentucky.com/news/politics-government/article207317709.html', 'sb151');
 				});
-
+				
 				function fitBounds() {
 					map.fitBounds(bounds, 0);
 				}
@@ -285,27 +286,37 @@
 					}
 				}
 
-				function getdiv($div, $ballot, name, photo, forTeachers, party, opponent, simplename, location) {
+				function getdiv($div, $ballot, running, name, photo, forTeachers, party, opponent, simplename, location) {
 					$div.empty();
 
 					var forText;
 					var desText;
 					var support = false;
+					
 					if (forTeachers === "Nay") {
 						forText = "<i class='fa fa-check green'></i>&nbsp;Voted <span class='foreachers'>in support of</span> teachers on <span title='Click for more information' class='sb151'>SB151</span>.";
-						desText = "If you are a " + party + " and want to say thank you, vote with your teachers on May 22nd. Vote for " + simplename + ". Let's keep supporters of our teachers in office.";
-						support = true;
+						if(running)
+						{
+							desText = "If you are a " + party + " and want to say thank you, vote with your teachers on May 22nd. Vote for " + simplename + ". Let's keep supporters of our teachers in office.";
+							support = true;
+						}else{
+							desText = "Because " + simplename + " is not running for re-election consider your choices and keep public education supporters in office.";
+						}
 					}
 					else if (forTeachers === "Yea") {
 						forText = "<i class='fa fa-ban red'></i>&nbsp;Voted <span class='foreachers'>against</span> teachers on <span title='Click for more information' class='sb151'>SB151</span>.";
-						if (opponent) {
+						if(!running){
+							desText = "Because " + simplename + " is not running for re-election consider your choices and keep public education supporters in office.";
+						}else if (opponent) {
 							desText = "If you are a " + party + " and want to send a signal that teachers are not political pawns, vote with teachers vote for " + opponent + " on May 22nd. Let's vote " + simplename + " out of the primary race.";
 						} else {
 							desText = "Unfortunately " + simplename + " doesn't have any opponents in the May 22nd primary. Show support for teachers; leave the ballot blank on this race. Vote again in November.";
 						}
 					} else {
 						forText = "<i class='fa fa-question yellow'></i>&nbsp;Didn't vote on <span title='Click for more information' class='sb151'>SB151</span>.";
-						if (opponent) {
+						if(!running){
+							desText = "Because " + simplename + " is not running for re-election consider your choices and keep public education supporters in office.";
+						}else if (opponent) {
 							desText = "Elected officials should work to support teachers. If you are a " + party + ", vote " + name + " out of the primary race. Vote for " + opponent + " instead.";
 						} else {
 							desText = "Unfortunately " + simplename + " doesn't have any opponents in the May 22nd primary. Show support for teachers; leave the ballot blank on this race. Vote again in November.";
@@ -330,7 +341,7 @@
 					if(opponent)
 						opp = getBallotDiv(!support, opponent);
 					
-					$ballot.html(`<br/><h5 class='small'>Your Ballot</h5><div class='ballot'><div class='header'><img src='` + party + `.png' alt='` + party + ` logo' /><br/>` + partyName + `
+					$ballot.html(`<br/><div class='ballot'><div class='header'><img src='` + party + `.png' alt='` + party + ` logo' /><br/>` + partyName + `
 						</div>
 						<div class='location'>` + location + `</div>` +
 						inc + opp
@@ -351,11 +362,27 @@
 
 				function updateData(houseId, repName, repPhoto, senateId, senName, senPhoto) {
 					var houseResult = $.grep(self.houseData, function (x) { return x.id == houseId })[0];
-					var houseDiv = getdiv($house, $houseBallot, houseResult.incumbent, repPhoto, houseResult.vote, houseResult.party, houseResult.opponent, repName, 'House District ' + houseId);
+					var houseDiv = getdiv($house, $houseBallot, houseResult.running === 'Y', houseResult.incumbent, repPhoto, houseResult.vote, houseResult.party, houseResult.opponent, repName, 'House District ' + houseId);
 
 					var senateResult = $.grep(self.senateData, function (x) { return x.id == senateId; })[0];
-					var senDiv = getdiv($senate, $senateBallot, senateResult.incumbent, senPhoto, senateResult.vote, senateResult.party, senateResult.opponent, senName, 'Senate District ' + senateId);
-
+					if(senateResult.reelection == 'Y')
+					{
+						$senateBallot.show();
+						var senDiv = getdiv($senate, $senateBallot, senateResult.running === 'Y', senateResult.incumbent, senPhoto, senateResult.vote, senateResult.party, senateResult.opponent, senName, 'Senate District ' + senateId);
+					}
+					else
+					{
+						$senateBallot.hide();
+						var forTeachers = senateResult.vote === "Nay";
+						if(forTeachers)
+						{
+							$senate.html("<p><i class='fa fa-check green'></i>&nbsp;Senator "+senName+" voted in support of teachers on <span class='sb151' title='Click for more information'>SB151</span>. This seat is not up for reelection this year; remember this vote in 2020 and keep supporters of education in office.</p>");
+						}else{
+							$senate.html("<p><i class='fa fa-ban red'></i>&nbsp;"+senName+" voted against teachers on <span class='sb151' title='Click for more information'>SB151</span>. This seat is not up for reelection this year; remember in 2020 and vote "+senName+" out of office. </p>");
+						}
+						$tbs.tabs("option", "active", 1 );
+					}
+					
 					if ($("#sidebar.collapsed").length) {
 						toggleSidebar();
 					}

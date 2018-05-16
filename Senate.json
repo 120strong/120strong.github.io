@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Humphries, Stan",
@@ -14,7 +14,7 @@
   },
   {
     "id": 2,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Carroll, Danny",
@@ -27,7 +27,7 @@
   },
   {
     "id": 3,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Westerfield, Whitney",
@@ -40,7 +40,7 @@
   },
   {
     "id": 4,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Democrat",
     "vote": "Nay",
     "incumbent": "Ridley, Dorsey",
@@ -53,7 +53,7 @@
   },
   {
     "id": 5,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Meredith, Stephen",
@@ -66,7 +66,7 @@
   },
   {
     "id": 6,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Republican",
     "vote": "Nay",
     "incumbent": "Embry, C.B. Jr.",
@@ -79,7 +79,7 @@
   },
   {
     "id": 7,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Democrat",
     "vote": "Nay",
     "incumbent": "Carroll, Julian M.",
@@ -92,7 +92,7 @@
   },
   {
     "id": 8,
-    "reelection": "Y",
+    "running": "N", "reelection": "Y",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Bowen, Joe",
@@ -105,7 +105,7 @@
   },
   {
     "id": 9,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Givens, David P.",
@@ -118,7 +118,7 @@
   },
   {
     "id": 10,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Democrat",
     "vote": "Nay",
     "incumbent": "Parrett, Dennis",
@@ -131,7 +131,7 @@
   },
   {
     "id": 11,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Schickel, John",
@@ -144,7 +144,7 @@
   },
   {
     "id": 12,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Republican",
     "vote": "Nay",
     "incumbent": "Kerr, Alice Forgy",
@@ -157,7 +157,7 @@
   },
   {
     "id": 13,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Democrat",
     "vote": "Nay",
     "incumbent": "Thomas, Reginald",
@@ -170,7 +170,7 @@
   },
   {
     "id": 14,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Higdon, Jimmy",
@@ -183,7 +183,7 @@
   },
   {
     "id": 15,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Girdler, Rick",
@@ -196,7 +196,7 @@
   },
   {
     "id": 16,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Wise, Max",
@@ -209,7 +209,7 @@
   },
   {
     "id": 17,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Thayer, Damon",
@@ -222,7 +222,7 @@
   },
   {
     "id": 18,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Democrat",
     "vote": "Nay",
     "incumbent": "Webb, Robin L.",
@@ -235,7 +235,7 @@
   },
   {
     "id": 19,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Democrat",
     "vote": "Nay",
     "incumbent": "McGarvey, Morgan",
@@ -248,7 +248,7 @@
   },
   {
     "id": 20,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Hornback, Paul",
@@ -261,7 +261,7 @@
   },
   {
     "id": 21,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Robinson, Albert",
@@ -274,7 +274,7 @@
   },
   {
     "id": 22,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Republican",
     "vote": "Nay",
     "incumbent": "Buford, Tom",
@@ -287,7 +287,7 @@
   },
   {
     "id": 23,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "McDaniel, Christian",
@@ -300,7 +300,7 @@
   },
   {
     "id": 24,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Schroder, Wil",
@@ -313,7 +313,7 @@
   },
   {
     "id": 25,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Stivers II, Robert",
@@ -326,7 +326,7 @@
   },
   {
     "id": 26,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Harris, Ernie",
@@ -339,7 +339,7 @@
   },
   {
     "id": 27,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "West, Steve",
@@ -352,7 +352,7 @@
   },
   {
     "id": 28,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Alvarado, Ralph",
@@ -365,7 +365,7 @@
   },
   {
     "id": 29,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Democrat",
     "vote": "Nay",
     "incumbent": "Turner, Johnny Ray",
@@ -378,7 +378,7 @@
   },
   {
     "id": 30,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Republican",
     "vote": "Nay",
     "incumbent": "Smith, Brandon",
@@ -391,7 +391,7 @@
   },
   {
     "id": 31,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Democrat",
     "vote": "Nay",
     "incumbent": "Jones II, Ray S.",
@@ -404,7 +404,7 @@
   },
   {
     "id": 32,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Wilson, Mike",
@@ -417,7 +417,7 @@
   },
   {
     "id": 33,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Democrat",
     "vote": "Nay",
     "incumbent": "Neal, Gerald A.",
@@ -430,7 +430,7 @@
   },
   {
     "id": 34,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Carpenter, Jared",
@@ -443,7 +443,7 @@
   },
   {
     "id": 35,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Democrat",
     "vote": "Nay",
     "incumbent": "Harper Angel, Denise",
@@ -456,7 +456,7 @@
   },
   {
     "id": 36,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Republican",
     "vote": "Nay",
     "incumbent": "Raque Adams, Julie",
@@ -469,7 +469,7 @@
   },
   {
     "id": 37,
-    "reelection": "N",
+    "running": "Y", "reelection": "N",
     "party": "Democrat",
     "vote": "No Vote",
     "incumbent": "Clark, Perry B.",
@@ -482,7 +482,7 @@
   },
   {
     "id": 38,
-    "reelection": "Y",
+    "running": "Y", "reelection": "Y",
     "party": "Republican",
     "vote": "Yea",
     "incumbent": "Seum, Dan \"Malano",
