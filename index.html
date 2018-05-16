@@ -129,6 +129,10 @@
 			color: green;
 		}
 		
+		i.white{
+			color: white;
+		}
+		
 		.fa-angle-double-out:before{
 			content:"\f102"
 		}
@@ -167,6 +171,30 @@
 				content:"\f101"
 			}
 		 }
+		 .sb151{
+			cursor: pointer;
+		 }
+		 .ballot{
+			border: 3px solid black;
+			text-align: center;
+		 }
+		 .ballot .location{
+			border-top: 2px solid black;
+			border-bottom: 2px solid black;
+			font-weight: bold;
+		 }
+		 .ballot .person{
+			text-align: left;
+			margin: 3px;
+		 }
+		 .ballot .header{
+			padding: 10px;
+		 }
+		 .ballot .person .vote{
+			border: 2px solid black;
+			padding-left: 3px;
+			padding-right: 3px;
+		 }
 	</style>
 </head>
 
@@ -186,13 +214,17 @@
 					<div id="senateTab">
 						<h2>Your Senator</h2>
 						<div id="senate">
-							<p>Click where you live on the map to see your senate information.</p>
+							<p>Did your senator support teachers on <span class='sb151' title='Click to learn more'>SB151</span>? Want to know what you can do on May 22nd to support teachers? Click on the map to see how your Representative and Senator voted.</p>
+						</div>
+						<div id="senateBallot">
 						</div>
 					</div>
 					<div id="houseTab">
 						<h2>Your Representative</h2>
 						<div id="house">
-							<p>Click where you live on the map to see your house of representative information.</p>
+							<p>Did your representative support teachers on <span class='sb151' title='Click to learn more'>SB151</span>? Want to know what you can do on May 22nd to support teachers? Click on the map to see how your Representative and Senator voted.</p>
+						</div>
+						<div id="houseBallot">
 						</div>
 					</div>
 				</div>
@@ -225,12 +257,20 @@
 				var geocoder;
 				var $sidebar = $("#sidebar");
 				var $senate = $("#senate");
+				var $senateBallot = $("#senateBallot");
 				var $house = $("#house");
+				var $houseBallot = $("#houseBallot");
 
 				$("#tabs").tabs();
 
 				self.houseData = {};
 				self.senateData = {};
+				
+				$(document).on('click', 'span.sb151', function(event){
+					event.preventDefault();
+					event.stopPropagation();
+					window.open('http://www.kentucky.com/news/politics-government/article207317709.html', 'sb151');
+				});
 
 				function fitBounds() {
 					map.fitBounds(bounds, 0);
@@ -245,28 +285,30 @@
 					}
 				}
 
-				function getdiv($div, name, photo, forTeachers, party, opponent, simplename) {
+				function getdiv($div, $ballot, name, photo, forTeachers, party, opponent, simplename, location) {
 					$div.empty();
 
 					var forText;
 					var desText;
+					var support = false;
 					if (forTeachers === "Nay") {
-						forText = "<i class='fa fa-check green'></i>&nbsp;Voted <span class='foreachers'>in support of</span> teachers on <span class='sb151'>SB151</span>.";
+						forText = "<i class='fa fa-check green'></i>&nbsp;Voted <span class='foreachers'>in support of</span> teachers on <span title='Click for more information' class='sb151'>SB151</span>.";
 						desText = "If you are a " + party + " and want to say thank you, vote with your teachers on May 22nd. Vote for " + simplename + ". Let's keep supporters of our teachers in office.";
+						support = true;
 					}
 					else if (forTeachers === "Yea") {
-						forText = "<i class='fa fa-ban red'></i>&nbsp;Voted <span class='foreachers'>against</span> teachers on <span class='sb151'>SB151</span>.";
+						forText = "<i class='fa fa-ban red'></i>&nbsp;Voted <span class='foreachers'>against</span> teachers on <span title='Click for more information' class='sb151'>SB151</span>.";
 						if (opponent) {
 							desText = "If you are a " + party + " and want to send a signal that teachers are not political pawns, vote with teachers vote for " + opponent + " on May 22nd. Let's vote " + simplename + " out of the primary race.";
 						} else {
-							desText = "Unfortunately " + simplename + " doesn't have any opponents in the May 22nd primary. To support teachers, please vote \"I support education\" or just \"Teachers\" in the \"Write-In\" section of the ballot.";
+							desText = "Unfortunately " + simplename + " doesn't have any opponents in the May 22nd primary. Show support for teachers; leave the ballot blank on this race. Vote again in November.";
 						}
 					} else {
-						forText = "<i class='fa fa-question yellow'></i>&nbsp;Didn't vote on <span class='sb151'>SB151</span>.";
+						forText = "<i class='fa fa-question yellow'></i>&nbsp;Didn't vote on <span title='Click for more information' class='sb151'>SB151</span>.";
 						if (opponent) {
-							desText = "If you are a " + party + " and want to send a signal that our elected officials should defend teachers, vote with teachers. Vote for " + opponent + " on May 22nd. Let's vote " + name + " out of the primary race.";
+							desText = "Elected officials should work to support teachers. If you are a " + party + ", vote " + name + " out of the primary race. Vote for " + opponent + " instead.";
 						} else {
-							desText = "Unfortunately " + simplename + " doesn't have any opponents in the May 22nd primary. To support teachers, please vote \"I support education\" or just \"Teachers\" in the \"Write-In\" section of the ballot.";
+							desText = "Unfortunately " + simplename + " doesn't have any opponents in the May 22nd primary. Show support for teachers; leave the ballot blank on this race. Vote again in November.";
 						}
 					}
 
@@ -275,16 +317,44 @@
 						<div class='forteachers'>` + forText + `</div>
 						<div class='outcome'>` + desText + `</div>
 					`);
+					
+					var partyName;
+					if(party === 'Democrat')
+						partyName = 'Democratic<br/>Party';
+					else
+						partyName = 'Republican<br/>Party';
+						
+					var inc = getBallotDiv(support, name);
+					
+					var opp = '';
+					if(opponent)
+						opp = getBallotDiv(!support, opponent);
+					
+					$ballot.html(`<br/><h5 class='small'>Your Ballot</h5><div class='ballot'><div class='header'><img src='` + party + `.png' alt='` + party + ` logo' /><br/>` + partyName + `
+						</div>
+						<div class='location'>` + location + `</div>` +
+						inc + opp
+						+ `
+					</div>`)
 
 					return $div;
+				}
+				
+				function getBallotDiv(support, name){
+					var supportSpan = `<i class='fa fa-ban white' title='Leave this blank'></i>`;
+					if(support)
+						supportSpan = `<i class='fa fa-check green' title='Vote with teachers!'></i>`;
+					return `<div class='person'>
+						<span class='vote'>`+supportSpan+`</span> ` + name + `
+					</div>`;
 				}
 
 				function updateData(houseId, repName, repPhoto, senateId, senName, senPhoto) {
 					var houseResult = $.grep(self.houseData, function (x) { return x.id == houseId })[0];
-					var houseDiv = getdiv($house, houseResult.incumbent, repPhoto, houseResult.vote, houseResult.party, houseResult.opponent, repName);
+					var houseDiv = getdiv($house, $houseBallot, houseResult.incumbent, repPhoto, houseResult.vote, houseResult.party, houseResult.opponent, repName, 'House District ' + houseId);
 
 					var senateResult = $.grep(self.senateData, function (x) { return x.id == senateId; })[0];
-					var senDiv = getdiv($senate, senateResult.incumbent, senPhoto, senateResult.vote, senateResult.party, senateResult.opponent, senName);
+					var senDiv = getdiv($senate, $senateBallot, senateResult.incumbent, senPhoto, senateResult.vote, senateResult.party, senateResult.opponent, senName, 'Senate District ' + senateId);
 
 					if ($("#sidebar.collapsed").length) {
 						toggleSidebar();
