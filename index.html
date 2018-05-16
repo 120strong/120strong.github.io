@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 	<meta name="viewport" content="initial-scale=1.0">
-	<meta charset="utf-8">
+	<meta charset="utf-8"><!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119326717-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-119326717-1');
+	</script>
 	<title>KY - 120 Counties Strong</title>
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css" integrity="sha256-OKtZU6RoyAhNskUqQr3Fmmvhl7q42tQQXAQLYxhhVek="
 	 crossorigin="anonymous">
@@ -460,6 +467,7 @@
 						var senPhoto = e.row['Senator Photo'].value;
 
 						updateData(houseId, repName, repPhoto, senateId, senName, senPhoto);
+						$("html, body").animate({ scrollTop: 0 }, "slow");
 					});
 					fitBounds();
 				}
