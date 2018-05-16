@@ -2,7 +2,8 @@
 <html>
 <head>
 	<meta name="viewport" content="initial-scale=1.0">
-	<meta charset="utf-8"><!-- Global site tag (gtag.js) - Google Analytics -->
+	<meta charset="utf-8">
+	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119326717-1"></script>
 	<script>
 	  window.dataLayer = window.dataLayer || [];
@@ -207,7 +208,6 @@
 		 }
 	</style>
 </head>
-
 <body>
 	<div class="container-fluid h-100">
 		<div class="row h-100">
@@ -249,257 +249,254 @@
 				</div>
 			</div>
 		</div>
-		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-		 crossorigin="anonymous"></script>
-		<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="
-		 crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
-		 crossorigin="anonymous"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
-		 crossorigin="anonymous"></script>
-		<script>
-			jQuery = $;
-			var mapApp = (function () {
-				self = this;
+	</div>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	 crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="
+	 crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+	 crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+	 crossorigin="anonymous"></script>
+	<script>
+		jQuery = $;
+		var mapApp = (function () {
+			self = this;
 
-				var map;
-				var bounds;
-				var geocoder;
-				var $sidebar = $("#sidebar");
-				var $senate = $("#senate");
-				var $senateBallot = $("#senateBallot");
-				var $house = $("#house");
-				var $houseBallot = $("#houseBallot");
+			var map;
+			var bounds;
+			var geocoder;
+			var $sidebar = $("#sidebar");
+			var $senate = $("#senate");
+			var $senateBallot = $("#senateBallot");
+			var $house = $("#house");
+			var $houseBallot = $("#houseBallot");
 
-				var $tbs = $("#tabs");
-				$tbs.tabs();
+			var $tbs = $("#tabs");
+			$tbs.tabs();
 
-				self.houseData = {};
-				self.senateData = {};
-				
-				$(document).on('click', 'span.sb151', function(event){
-					event.preventDefault();
-					event.stopPropagation();
-					window.open('http://www.kentucky.com/news/politics-government/article207317709.html', 'sb151');
-				});
-				
-				function fitBounds() {
-					map.fitBounds(bounds, 0);
+			self.houseData = {};
+			self.senateData = {};
+			
+			$(document).on('click', 'span.sb151', function(event){
+				event.preventDefault();
+				event.stopPropagation();
+				window.open('http://www.kentucky.com/news/politics-government/article207317709.html', 'sb151');
+			});
+			
+			function fitBounds() {
+				map.fitBounds(bounds, 0);
+			}
+
+			function toggleSidebar() {
+				$sidebar.toggleClass("collapsed");
+				$("#content").toggleClass("col-lg-12 col-lg-9");
+				$("#toggle i").toggleClass("fa-angle-double-in fa-angle-double-out");
+				if ($("#sidebar.collapsed").length) {
+					fitBounds();
 				}
+			}
 
-				function toggleSidebar() {
-					$sidebar.toggleClass("collapsed");
-					$("#content").toggleClass("col-lg-12 col-lg-9");
-					$("#toggle i").toggleClass("fa-angle-double-in fa-angle-double-out");
-					if ($("#sidebar.collapsed").length) {
-						fitBounds();
+			function getdiv($div, $ballot, running, name, photo, againstTeachers, party, opponent, simplename, location, others) {
+				$div.empty();
+
+				var forText;
+				var desText;
+				var support = false;
+				
+				if (againstTeachers === "Nay") {
+					forText = "<i class='fa fa-check green'></i>&nbsp;Voted <span class='forTeachers'>in support of</span> teachers on <span title='Click for more information' class='sb151'>SB151</span>.";
+					if(running)
+					{
+						desText = "If you are a " + party + ", vote for " + simplename + ". Let's keep supporters of our teachers in office.";
+						support = true;
+					}else{
+						desText = "Because " + simplename + " is not running for re-election consider your choices and keep public education supporters in office.";
 					}
 				}
-
-				function getdiv($div, $ballot, running, name, photo, againstTeachers, party, opponent, simplename, location, others) {
-					$div.empty();
-
-					var forText;
-					var desText;
-					var support = false;
-					
-					if (againstTeachers === "Nay") {
-						forText = "<i class='fa fa-check green'></i>&nbsp;Voted <span class='forTeachers'>in support of</span> teachers on <span title='Click for more information' class='sb151'>SB151</span>.";
-						if(running)
-						{
-							desText = "If you are a " + party + ", vote for " + simplename + ". Let's keep supporters of our teachers in office.";
-							support = true;
-						}else{
-							desText = "Because " + simplename + " is not running for re-election consider your choices and keep public education supporters in office.";
-						}
-					}
-					else if (againstTeachers === "Yea") {
-						forText = "<i class='fa fa-ban red'></i>&nbsp;Voted <span class='againstTeachers'>against</span> teachers on <span title='Click for more information' class='sb151'>SB151</span>.";
-						if(!running){
-							desText = "Because " + simplename + " is not running for re-election consider your choices and keep public education supporters in office.";
-						}else if (opponent) {
-							desText = "Teachers are not political pawns. If you are a " + party + ", vote " + simplename + " out of the primary race. Vote for " + opponent + " instead.";
-						} else {
-							desText = "Unfortunately, " + simplename + " doesn't have opponents in the May 22nd primary. Show support for teachers; leave the ballot blank on this race. Vote again in November.";
-						}
+				else if (againstTeachers === "Yea") {
+					forText = "<i class='fa fa-ban red'></i>&nbsp;Voted <span class='againstTeachers'>against</span> teachers on <span title='Click for more information' class='sb151'>SB151</span>.";
+					if(!running){
+						desText = "Because " + simplename + " is not running for re-election consider your choices and keep public education supporters in office.";
+					}else if (opponent) {
+						desText = "Teachers are not political pawns. If you are a " + party + ", vote " + simplename + " out of the primary race. Vote for " + opponent + " instead.";
 					} else {
-						forText = "<i class='fa fa-question yellow'></i>&nbsp;Didn't vote on <span title='Click for more information' class='sb151'>SB151</span>.";
-						if(!running){
-							desText = "Because " + simplename + " is not running for re-election consider your choices and keep public education supporters in office.";
-						}else if (opponent) {
-							desText = "Elected officials should work to support teachers. If you are a " + party + ", vote " + name + " out of the primary race. Vote for " + opponent + " instead.";
-						} else {
-							desText = "Unfortunately, " + simplename + " doesn't have opponents in the May 22nd primary. Show support for teachers; leave the ballot blank on this race. Vote again in November.";
-						}
+						desText = "Unfortunately, " + simplename + " doesn't have opponents in the May 22nd primary. Show support for teachers; leave the ballot blank on this race. Vote again in November.";
 					}
+				} else {
+					forText = "<i class='fa fa-question yellow'></i>&nbsp;Didn't vote on <span title='Click for more information' class='sb151'>SB151</span>.";
+					if(!running){
+						desText = "Because " + simplename + " is not running for re-election consider your choices and keep public education supporters in office.";
+					}else if (opponent) {
+						desText = "Elected officials should work to support teachers. If you are a " + party + ", vote " + name + " out of the primary race. Vote for " + opponent + " instead.";
+					} else {
+						desText = "Unfortunately, " + simplename + " doesn't have opponents in the May 22nd primary. Show support for teachers; leave the ballot blank on this race. Vote again in November.";
+					}
+				}
 
-					$div.html(`<div class='image-container'><img class='photo' src='` + photo + `' alt='Photo of ` + simplename + `' /></div>
-						<div class='name'>(` + party.charAt(0) + ") " + name + `</div>
-						<div class='forteachers'>` + forText + `</div>
-						<div class='outcome'>` + desText + `</div>
-					`);
+				$div.html("<div class='image-container'><img class='photo' src='" + photo + "' alt='Photo of " + simplename + "' /></div>"+
+					"<div class='name'>(" + party.charAt(0) + ") " + name + "</div>"+
+					"<div class='forteachers'>" + forText + "</div>" +
+					"<div class='outcome'>" + desText + "</div>"
+				);
+				
+				var partyName;
+				var topHeader;
+				if(party === 'Democrat')
+				{
+					partyName = 'Democratic<br/>Party';
+					topHeader = 'Democratic Party';
+				}
+				else
+				{
+					partyName = 'Republican<br/>Party';
+					topHeader = 'Republican Party';
+				}
 					
-					var partyName;
-					var topHeader;
-					if(party === 'Democrat')
-					{
-						partyName = 'Democratic<br/>Party';
-						topHeader = 'Democratic Party';
+				var inc = getBallotDiv(support, name);
+				
+				var opp = '';
+				if(opponent)
+				{
+					opp = getBallotDiv(!support, opponent);
+					if(others){
+						others.split(/\r?\n/).forEach(function(other)
+						{
+							opp += getBallotDiv(false, other);
+						});
 					}
-					else
-					{
-						partyName = 'Republican<br/>Party';
-						topHeader = 'Republican Party';
-					}
-						
-					var inc = getBallotDiv(support, name);
-					
-					var opp = '';
-					if(opponent)
-					{
-						opp = getBallotDiv(!support, opponent);
-						if(others){
-							others.split(/\r?\n/).forEach(function(other)
-							{
-								opp += getBallotDiv(false, other);
-							});
-						}
-					}else if(!support){
-						opp = getBallotDiv(true, 'None of the above');
-					}
-					
-					$ballot.html(`<br/>Your May 22 2018 Ballot<div class='ballot'><div class='topheader'>`+topHeader+`<br />Primary Ballot</div><div class='header'><img src='` + party + `.png' alt='` + party + ` logo' /><br/>` + partyName + `
-						</div>
-						<div class='location'>` + location + `</div>` +
-						inc + opp
-						+ `
-					</div>`)
-
-					return $div;
+				}else if(!support){
+					opp = getBallotDiv(true, 'None of the above');
 				}
 				
-				function getBallotDiv(support, name){
-					if(name.includes(','))
-					{
-						var names = name.split(',');
-						name = '';
-						for(var i = 1; i < names.length; i++){
-							name += names[i] + ' ';
-						}
-						name += names[0];
+				$ballot.html("<br/>Your May 22 2018 Ballot<div class='ballot'><div class='topheader'>"+topHeader+"<br />Primary Ballot</div><div class='header'><img src='" + party + ".png' alt='" + party + " logo' /><br/>" + partyName +
+					"</div>" +
+					"<div class='location'>" + location + "</div>" +
+					inc + opp
+					+ "</div>")
+
+				return $div;
+			}
+			
+			function getBallotDiv(support, name){
+				if(name.includes(','))
+				{
+					var names = name.split(',');
+					name = '';
+					for(var i = 1; i < names.length; i++){
+						name += names[i] + ' ';
 					}
-					var supportSpan = `<i class='fa fa-ban white' title='Leave this blank'></i>`;
-					if(support)
-						supportSpan = `<i class='fa fa-check green' title='Vote with teachers!'></i>`;
-					return `<div class='person'>
-						<span class='vote'>`+supportSpan+`</span> ` + name + `
-					</div>`;
+					name += names[0];
 				}
+				var supportSpan = "<i class='fa fa-ban white' title='Leave this blank'></i>";
+				if(support)
+					supportSpan = "<i class='fa fa-check green' title='Vote with teachers!'></i>";
+				return "<div class='person'><span class='vote'>"+supportSpan+"</span> " + name + "</div>";
+			}
 
-				function updateData(houseId, repName, repPhoto, senateId, senName, senPhoto) {
-					var houseResult = $.grep(self.houseData, function (x) { return x.id == houseId })[0];
-					var houseDiv = getdiv($house, $houseBallot, houseResult.running === 'Y', houseResult.incumbent, repPhoto, houseResult.vote, houseResult.party, houseResult.opponent, repName, 'House District ' + houseId, houseResult.opponentOther);
+			function updateData(houseId, repName, repPhoto, senateId, senName, senPhoto) {
+				var houseResult = $.grep(self.houseData, function (x) { return x.id == houseId })[0];
+				var houseDiv = getdiv($house, $houseBallot, houseResult.running === 'Y', houseResult.incumbent, repPhoto, houseResult.vote, houseResult.party, houseResult.opponent, repName, 'House District ' + houseId, houseResult.opponentOther);
 
-					var senateResult = $.grep(self.senateData, function (x) { return x.id == senateId; })[0];
-					if(senateResult.reelection == 'Y')
-					{
-						$senateBallot.show();
-						var senDiv = getdiv($senate, $senateBallot, senateResult.running === 'Y', senateResult.incumbent, senPhoto, senateResult.vote, senateResult.party, senateResult.opponent, senName, 'Senate District ' + senateId, senateResult.opponentOther);
-					}
-					else
-					{
-						$senateBallot.hide();
-						var forTeachers = senateResult.vote === "Nay";
-						if(forTeachers)
-						{
-							$senate.html("<p><i class='fa fa-check green'></i>&nbsp;Senator "+senName+" voted in support of teachers on <span class='sb151' title='Click for more information'>SB151</span>. This seat is not up for reelection this year; remember this vote in 2020 and keep supporters of education in office.</p>");
-						}else{
-							$senate.html("<p><i class='fa fa-ban red'></i>&nbsp;"+senName+" voted against teachers on <span class='sb151' title='Click for more information'>SB151</span>. This seat is not up for reelection this year; remember in 2020 and vote "+senName+" out of office. </p>");
-						}
-						$tbs.tabs("option", "active", 1 );
-					}
-					
-					if ($("#sidebar.collapsed").length) {
-						toggleSidebar();
-					}
+				var senateResult = $.grep(self.senateData, function (x) { return x.id == senateId; })[0];
+				if(senateResult.reelection == 'Y')
+				{
+					$senateBallot.show();
+					var senDiv = getdiv($senate, $senateBallot, senateResult.running === 'Y', senateResult.incumbent, senPhoto, senateResult.vote, senateResult.party, senateResult.opponent, senName, 'Senate District ' + senateId, senateResult.opponentOther);
 				}
-
-				$("#toggle").click(function () {
+				else
+				{
+					$senateBallot.hide();
+					var forTeachers = senateResult.vote === "Nay";
+					if(forTeachers)
+					{
+						$senate.html("<p><i class='fa fa-check green'></i>&nbsp;Senator "+senName+" voted in support of teachers on <span class='sb151' title='Click for more information'>SB151</span>. This seat is not up for reelection this year; remember this vote in 2020 and keep supporters of education in office.</p>");
+					}else{
+						$senate.html("<p><i class='fa fa-ban red'></i>&nbsp;"+senName+" voted against teachers on <span class='sb151' title='Click for more information'>SB151</span>. This seat is not up for reelection this year; remember in 2020 and vote "+senName+" out of office. </p>");
+					}
+					$tbs.tabs("option", "active", 1 );
+				}
+				
+				if ($("#sidebar.collapsed").length) {
 					toggleSidebar();
-				});
-
-				self.initMap = function () {
-					map = new google.maps.Map(document.getElementById('map'), {
-						center: new google.maps.LatLng(37.76792991127481, -85.76869238281249),
-						zoom: 8,
-						mapTypeId: google.maps.MapTypeId.ROADMAP,
-						zoomControl: true,
-						mapTypeControl: false,
-						scaleControl: true,
-						streetViewControl: false,
-						rotateControl: true,
-						fullscreenControl: false
-					});
-					geocoder = new google.maps.Geocoder();
-					bounds = new google.maps.LatLngBounds();
-					bounds.extend(new google.maps.LatLng(36.498987, -89.575435));
-					bounds.extend(new google.maps.LatLng(39.233692, -82.040874));
-					var layer = new google.maps.FusionTablesLayer({
-						map: map,
-						heatmap: { enabled: false },
-						suppressInfoWindows: false,
-						query: {
-							select: "geometry",
-							from: "138Y1ve5dqA1xpxXO_pZvSa-j9Bu5B_Is012b_8Ii"
-						},
-						options: {
-							styleId: 2,
-							templateId: 2
-						}
-					});
-					google.maps.event.addListener(layer, 'click', function (e) {
-						var houseId = e.row['House District'].value;
-						var repName = e.row['Representative'].value;
-						var repPhoto = e.row['Representative Photo'].value;
-
-						var senateId = e.row['Senate District'].value;
-						var senName = e.row['Senator'].value;
-						var senPhoto = e.row['Senator Photo'].value;
-
-						updateData(houseId, repName, repPhoto, senateId, senName, senPhoto);
-						$("html, body").animate({ scrollTop: 0 }, "slow");
-					});
-					fitBounds();
 				}
-				$(window).resize(function () {
-					fitBounds();
-				});
+			}
 
-				$.ajax({
-					type: "get",
-					dataType: "json",
-					url: "Senate.json",
-					success: function (data) {
-						self.senateData = data;
-					}
-				});
+			$("#toggle").click(function () {
+				toggleSidebar();
+			});
 
-				$.ajax({
-					type: "get",
-					dataType: "json",
-					url: "House.json",
-					success: function (data) {
-						self.houseData = data;
+			self.initMap = function () {
+				map = new google.maps.Map(document.getElementById('map'), {
+					center: new google.maps.LatLng(37.76792991127481, -85.76869238281249),
+					zoom: 8,
+					mapTypeId: google.maps.MapTypeId.ROADMAP,
+					zoomControl: true,
+					mapTypeControl: false,
+					scaleControl: true,
+					streetViewControl: false,
+					rotateControl: true,
+					fullscreenControl: false
+				});
+				geocoder = new google.maps.Geocoder();
+				bounds = new google.maps.LatLngBounds();
+				bounds.extend(new google.maps.LatLng(36.498987, -89.575435));
+				bounds.extend(new google.maps.LatLng(39.233692, -82.040874));
+				var layer = new google.maps.FusionTablesLayer({
+					map: map,
+					heatmap: { enabled: false },
+					suppressInfoWindows: false,
+					query: {
+						select: "geometry",
+						from: "138Y1ve5dqA1xpxXO_pZvSa-j9Bu5B_Is012b_8Ii"
 					},
-					error: function (jxhr, status, error) {
-						debugger;
+					options: {
+						styleId: 2,
+						templateId: 2
 					}
 				});
+				google.maps.event.addListener(layer, 'click', function (e) {
+					var houseId = e.row['House District'].value;
+					var repName = e.row['Representative'].value;
+					var repPhoto = e.row['Representative Photo'].value;
 
-				return self;
-			})();
-		</script>
-		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyR_6F8uTjb-lC0yApaMx22754dpiFYkQ&callback=mapApp.initMap"></script>
+					var senateId = e.row['Senate District'].value;
+					var senName = e.row['Senator'].value;
+					var senPhoto = e.row['Senator Photo'].value;
+
+					updateData(houseId, repName, repPhoto, senateId, senName, senPhoto);
+					$("html, body").animate({ scrollTop: 0 }, "slow");
+				});
+				fitBounds();
+			}
+			$(window).resize(function () {
+				fitBounds();
+			});
+
+			$.ajax({
+				type: "get",
+				dataType: "json",
+				url: "Senate.json",
+				success: function (data) {
+					self.senateData = data;
+				}
+			});
+
+			$.ajax({
+				type: "get",
+				dataType: "json",
+				url: "House.json",
+				success: function (data) {
+					self.houseData = data;
+				},
+				error: function (jxhr, status, error) {
+					debugger;
+				}
+			});
+
+			return self;
+		})();
+	</script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyR_6F8uTjb-lC0yApaMx22754dpiFYkQ&callback=mapApp.initMap"></script>
 </body>
-
 </html>
