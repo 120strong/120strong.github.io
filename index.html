@@ -159,7 +159,7 @@
 				transition: margin 0.3s ease;
 				border-right: 1px solid black;
 				max-height: 100%;
-				overflow-y: scroll;
+				overflow-y: auto;
 			}
 
 			.collapsed {
@@ -185,6 +185,7 @@
 			cursor: pointer;
 		 }
 		 .ballot{
+			max-width: 700px;
 			border: 3px solid black;
 			text-align: center;
 		 }
@@ -213,7 +214,7 @@
 <body>
 	<div class="container-fluid h-100">
 		<div class="row h-100">
-			<div class="col-lg-3 col-lg-push-9 collapsed" id="sidebar">
+			<div class="col-xl-3 col-xl-push-9 col-lg-4 col-lg-push-8 collapsed" id="sidebar">
 				<div id="tabs">
 					<ul>
 						<li>
@@ -241,7 +242,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-12 h-100" id="content">
+			<div class="col-xl-12 col-lg-12 h-100" id="content">
 				<div id="toggle-container">
 					<span id="toggle" class="toggle-sidebar">
 						<i class="fas fa-angle-double-in"></i>
@@ -252,6 +253,26 @@
 			</div>
 		</div>
 	</div>
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLongTitle">Welcome to 120Strong.com</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+		  <div class="modal-body">
+			<p>In March 2018, significant legislation on teacher pension was added to sewage system bill in the final hours of the legislative session. Senate Bill 151 was not vetted lawfully. It did not include a fiscal actuarial analysis as required by law. It was not made available to the public before votes were cast. Yet, 94 Representatives and 22 Senators voted for SB151.</p>
+			<p>SB151 is one of the dominos that prompted teachers across the state to march in Frankfort this spring. The Kentucky Attorney General has filed a lawsuit challenging SB151.</p>
+			<p>Click on the map to see how your representatives voted on SB151 and consider this information as you vote in the May 22 Primary Election.</p>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 	 crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="
@@ -260,6 +281,7 @@
 	 crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
 	 crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 	<script>
 		jQuery = $;
 		var mapApp = (function () {
@@ -292,7 +314,8 @@
 
 			function toggleSidebar() {
 				$sidebar.toggleClass("collapsed");
-				$("#content").toggleClass("col-lg-12 col-lg-9");
+				$("#content").toggleClass("col-xl-12 col-xl-9");
+				$("#content").toggleClass("col-lg-12 col-lg-8");
 				$("#toggle i").toggleClass("fa-angle-double-in fa-angle-double-out");
 				if ($("#sidebar.collapsed").length) {
 					fitBounds();
@@ -427,7 +450,11 @@
 			$("#toggle").click(function () {
 				toggleSidebar();
 			});
-
+			
+			if(!Cookies.get('showModal'))
+				$('#myModal').modal('show')
+			Cookies.set('showModal', 'true', { expires: 7 });
+			
 			self.initMap = function () {
 				map = new google.maps.Map(document.getElementById('map'), {
 					center: new google.maps.LatLng(37.76792991127481, -85.76869238281249),
@@ -473,6 +500,7 @@
 			}
 			$(window).resize(function () {
 				fitBounds();
+				$("#dialog").dialog("option", "position", {my: "center", at: "center", of: window});
 			});
 
 			$.ajax({
