@@ -218,7 +218,7 @@
 					<div id="senateTab">
 						<h2>Your Senator</h2>
 						<div id="senate">
-							<p>Did your senator support teachers on <span class='sb151' title='Click to learn more'>SB151</span>? Want to know what you can do on May 22nd to support teachers? Click on the map to see how your Representative and Senator voted.</p>
+							<p>Did your senator support teachers on <span class='sb151' title='Click to learn more'>SB151</span>? Click on the map to see how your Representative and Senator voted.</p>
 						</div>
 						<div id="senateBallot">
 						</div>
@@ -226,7 +226,7 @@
 					<div id="houseTab">
 						<h2>Your Representative</h2>
 						<div id="house">
-							<p>Did your representative support teachers on <span class='sb151' title='Click to learn more'>SB151</span>? Want to know what you can do on May 22nd to support teachers? Click on the map to see how your Representative and Senator voted.</p>
+							<p>Did your representative support teachers on <span class='sb151' title='Click to learn more'>SB151</span>? Click on the map to see how your Representative and Senator voted.</p>
 						</div>
 						<div id="houseBallot">
 						</div>
@@ -256,7 +256,7 @@
 		  <div class="modal-body">
 			<p>In March 2018, significant legislation on teacher pension was added to sewage system bill in the final hours of the legislative session. Senate Bill 151 was not vetted lawfully. It did not include a fiscal actuarial analysis as required by law. It was not made available to the public before votes were cast. Yet, 94 Representatives and 22 Senators voted for SB151.</p>
 			<p>SB151 is one of the dominos that prompted teachers across the state to march in Frankfort this spring. The Kentucky Attorney General has filed a lawsuit challenging SB151.</p>
-			<p>Click on the map to see how your representatives voted on SB151 and consider this information as you vote in the May 22 Primary Election.</p>
+			<p>Click on the map to see how your representatives voted on SB151.</p>
 		  </div>
 		  <div class="modal-footer">
 			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -369,9 +369,9 @@
 					var forTeachers = senateResult.vote === "Nay";
 					if(forTeachers)
 					{
-						$senate.html("<p><i class='fa fa-check green'></i>&nbsp;Senator "+senName+" voted in support of teachers on <span class='sb151' title='Click for more information'>SB151</span>. This seat is not up for reelection this year.</p>");
+						$senate.html("<p><i class='fa fa-check green'></i>&nbsp;Senator "+senName+" voted in support of teachers on <span class='sb151' title='Click for more information'>SB151</span>. This seat is not up for re-election this year.</p>");
 					}else{
-						$senate.html("<p><i class='fa fa-ban red'></i>&nbsp;"+senName+" voted against teachers on <span class='sb151' title='Click for more information'>SB151</span>. This seat is not up for reelection this year</p>");
+						$senate.html("<p><i class='fa fa-ban red'></i>&nbsp;"+senName+" voted against teachers on <span class='sb151' title='Click for more information'>SB151</span>. This seat is not up for re-election this year</p>");
 					}
 					$tbs.tabs("option", "active", 1 );
 				}
